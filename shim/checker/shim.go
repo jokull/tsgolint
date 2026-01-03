@@ -131,6 +131,8 @@ func Checker_getPropertyNameForKnownSymbolName(recv *checker.Checker, symbolName
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
 //go:linkname Checker_isTypeStrictSubtypeOf github.com/microsoft/typescript-go/internal/checker.(*Checker).isTypeStrictSubtypeOf
 func Checker_isTypeStrictSubtypeOf(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
+//go:linkname Checker_getTypePredicateOfSignature github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypePredicateOfSignature
+func Checker_getTypePredicateOfSignature(recv *checker.Checker, sig *checker.Signature) *checker.TypePredicate
 //go:linkname Checker_GetShorthandAssignmentValueSymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).GetShorthandAssignmentValueSymbol
 func Checker_GetShorthandAssignmentValueSymbol(recv *checker.Checker, location *ast.Node) *ast.Symbol
 type extra_Checker struct {
@@ -851,6 +853,9 @@ func Signature_parameters(v *checker.Signature) []*ast.Symbol {
 func Signature_declaration(v *checker.Signature) *ast.Node {
   return ((*extra_Signature)(unsafe.Pointer(v))).declaration
 }
+func Signature_resolvedTypePredicate(v *checker.Signature) *checker.TypePredicate {
+  return ((*extra_Signature)(unsafe.Pointer(v))).resolvedTypePredicate
+}
 type SignatureCheckMode = checker.SignatureCheckMode
 const SignatureCheckModeBivariantCallback = checker.SignatureCheckModeBivariantCallback
 const SignatureCheckModeCallback = checker.SignatureCheckModeCallback
@@ -886,6 +891,8 @@ type SignatureToSignatureDeclarationOptions = checker.SignatureToSignatureDeclar
 type SimpleTypeMapper = checker.SimpleTypeMapper
 //go:linkname SkipAlias github.com/microsoft/typescript-go/internal/checker.SkipAlias
 func SkipAlias(symbol *ast.Symbol, checker *checker.Checker) *ast.Symbol
+//go:linkname SkipTypeChecking github.com/microsoft/typescript-go/internal/checker.SkipTypeChecking
+func SkipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions, host checker.Program, ignoreNoCheck bool) bool
 type SourceFileLinks = checker.SourceFileLinks
 type SpreadLinks = checker.SpreadLinks
 type StringLiteralType = checker.StringLiteralType
@@ -1215,3 +1222,5 @@ const WideningKindNormal = checker.WideningKindNormal
 func GetFunctionFlags(node *ast.Node) checker.FunctionFlags
 //go:linkname IsNonDeferredTypeReference github.com/microsoft/typescript-go/internal/checker.isNonDeferredTypeReference
 func IsNonDeferredTypeReference(t *checker.Type) bool
+//go:linkname GetMappedTypeModifiers github.com/microsoft/typescript-go/internal/checker.getMappedTypeModifiers
+func GetMappedTypeModifiers(t *checker.Type) checker.MappedTypeModifiers
